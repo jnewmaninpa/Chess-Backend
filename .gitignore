@@ -21,3 +21,4 @@ src/main/java/META-INF/
 src/main/resources/static/.vs/slnx.sqlite
 src/main/resources/static/.vs/static/v16/.suo
 src/main/resources/static/.vs/VSWorkspaceState.json
+!pom.xml
