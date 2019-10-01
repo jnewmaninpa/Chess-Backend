@@ -53,47 +53,62 @@ public class AIMove {
 		List<Move> moveList = gameState.getAllMoves();
 
 		if (!moveList.isEmpty()) {
-			// if there is a piece to take take it 90% of the time
+			
 			for (Move move : moveList) {
 				GameState tempGameState = gameState.copy();
-				Move tempMove;
-				if (move instanceof KingCastleMove) {
-					tempMove = new KingCastleMove(tempGameState.getPieceAt(move.getPieceInitialPosition()),
-							move.getPosition());
-				} else if (move instanceof PawnUpgradeMove) {
-					tempMove = new PawnUpgradeMove(tempGameState.getPieceAt(move.getPieceInitialPosition()),
-							move.getPosition(), ((PawnUpgradeMove) move).getUpgrade());
-				} else {
-					tempMove = new Move(tempGameState.getPieceAt(move.getPieceInitialPosition()), move.getPosition());
-				}
+				Move tempMove = getTempMove(move, tempGameState);
 				tempMove.move(tempGameState);
 				// if the move will end the game always take it
 				if (tempGameState.getGameOver()) {
 					return move;
 				}
+			}
+			
+			for (Move move : moveList) {
+				GameState tempGameState = gameState.copy();
+				Move tempMove = getTempMove(move, tempGameState);
+				tempMove.move(tempGameState);
 				// if the move puts the player in check take it 90% of the time
 				if (tempGameState.playerInCheck() && (random.nextInt(99) <= 90)) {
 					return move;
 				}
 			}
+			
 			// if there is a piece to take take it 60% of the time
 			for (Move move : moveList) {
 				if ((gameState.getPieceAt(move.getPosition()).getType() != PieceType.NONE) && (random.nextInt(99) <= 60)) {
 					return move;
 				}
 			}
-			// otherwise advance a pawn 50& of the time
+			
+			// otherwise advance a pawn 50% of the time
 			for (Move move : moveList) {
 				if ((move.getPiece().getType() == PieceType.PAWN) && (random.nextInt(99) <= 50)) {
 					return move;
 				}
 			}
+			
 			// otherwise make a random move
 			int index = random.nextInt(moveList.size());
 			return moveList.get(index);
+			
 		} else {
-			return null;
+			throw new GameOverException("The game is over " + gameState.getActiveColor() + " has not more moves");
 		}
+	}
+
+	private static Move getTempMove(Move move, GameState tempGameState) {
+		Move tempMove;
+		if (move instanceof KingCastleMove) {
+			tempMove = new KingCastleMove(tempGameState.getPieceAt(move.getPieceInitialPosition()),
+					move.getPosition());
+		} else if (move instanceof PawnUpgradeMove) {
+			tempMove = new PawnUpgradeMove(tempGameState.getPieceAt(move.getPieceInitialPosition()),
+					move.getPosition(), ((PawnUpgradeMove) move).getUpgrade());
+		} else {
+			tempMove = new Move(tempGameState.getPieceAt(move.getPieceInitialPosition()), move.getPosition());
+		}
+		return tempMove;
 	}
 
 }
