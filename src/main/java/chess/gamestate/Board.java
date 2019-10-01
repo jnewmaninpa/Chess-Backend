@@ -1,4 +1,4 @@
-package chess.gameState;
+package chess.gamestate;
 
 import chess.piece.*;
 import chess.piece.properties.PieceType;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class Board {
 
-	private Piece[][] board = new Piece[8][8]; // [rank][file] -> rank:0=1...7=8 file:0=a...7=h
+	private Piece[][] boardArray = new Piece[8][8]; // [rank][file] -> rank:0=1...7=8 file:0=a...7=h
 	private GameState gameState;
 
 	public Board(GameState gameState) {
@@ -45,13 +45,13 @@ public class Board {
 		// initialize empty board with None pieces
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				board[i][j] = new None((char) ('a' + j), 1 + i);
+				boardArray[i][j] = new None((char) ('a' + j), 1 + i);
 			}
 		}
 
 		// add pieces that exist to the board
 		for (Piece piece : gameState.getPieceList()) {
-			board[piece.getPosition().getY()][piece.getPosition().getX()] = piece;
+			boardArray[piece.getPosition().getY()][piece.getPosition().getX()] = piece;
 		}
 	}
 
@@ -61,7 +61,7 @@ public class Board {
 	}
 
 	public Piece[][] getBoard() {
-		return board;
+		return boardArray;
 	}
 
 	public GameState getGameState() {
@@ -82,30 +82,24 @@ public class Board {
 
 	@Override
 	public String toString() {
-		String string = "";
+		StringBuilder string = new StringBuilder();
 		for (int rank = 8; rank >= 1; rank--) {
-			string += rank + "| ";
-			for (Piece piece : this.board[rank - 1]) {
-				string += piece + " ";
+			string.append(rank + "| ");
+			for (Piece piece : this.boardArray[rank - 1]) {
+				string.append(piece + " ");
 			}
-			string += "\n";
+			string.append("\n");
 		}
-		string += "   ";
+		string.append("   ");
 		for (char file = 'a'; file <= 'h'; file++) {
-			string += "--";
+			string.append("--");
 		}
-		string += "\n   ";
+		string.append("\n   ");
 		for (char file = 'a'; file <= 'h'; file++) {
-			string += file + " ";
+			string.append(file + " ");
 		}
 
-		return string;
-	}
-
-	public static void main(String[] args) {
-		Board board = new Board();
-
-		System.out.println(board);
+		return string.toString();
 	}
 
 }

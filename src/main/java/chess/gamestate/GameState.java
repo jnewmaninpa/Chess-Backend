@@ -1,4 +1,4 @@
-package chess.gameState;
+package chess.gamestate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,6 @@ public class GameState {
 		private Position enPassantTargetSquare;
 		private int halfmoveClock;
 		private int fullmoveNumber;
-
-		public Builder() {
-
-		}
 
 		public Builder withActiveColor(PieceColor activeColor) {
 			this.activeColor = activeColor;
@@ -159,6 +155,10 @@ public class GameState {
 	public boolean whiteInCheck(GameState gameState) {
 		Optional<Piece> matchingPiece = pieceList.stream().filter(piece -> piece.getColor() == PieceColor.WHITE)
 				.filter(piece -> piece.getType() == PieceType.KING).findFirst();
+		
+		if (!matchingPiece.isPresent()) {
+			throw new KingNotFoundException("The white king could not be found");
+		}
 
 		King king = (King) matchingPiece.get();
 
@@ -168,6 +168,10 @@ public class GameState {
 	public boolean blackInCheck(GameState gameState) {
 		Optional<Piece> matchingPiece = pieceList.stream().filter(piece -> piece.getColor() == PieceColor.BLACK)
 				.filter(piece -> piece.getType() == PieceType.KING).findFirst();
+		
+		if (!matchingPiece.isPresent()) {
+			throw new KingNotFoundException("The black king could not be found");
+		}
 
 		King king = (King) matchingPiece.get();
 
@@ -222,7 +226,7 @@ public class GameState {
 	}
 
 	public boolean getGameOver() {
-		return getAllMoves().size() == 0 || pieceList.size() <= 2;
+		return getAllMoves().isEmpty() || pieceList.size() <= 2;
 	}
 
 	public CastlingAvailability getCastlingAvailability() {

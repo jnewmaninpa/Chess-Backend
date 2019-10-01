@@ -5,8 +5,8 @@ import java.util.List;
 
 import chess.api.game.GameModel;
 import chess.game.move.Move;
-import chess.gameState.FEN;
-import chess.gameState.GameState;
+import chess.gamestate.FEN;
+import chess.gamestate.GameState;
 import chess.piece.Piece;
 import chess.position.Position;
 

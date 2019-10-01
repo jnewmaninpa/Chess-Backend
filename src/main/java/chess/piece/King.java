@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import chess.game.move.Move;
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.move.logic.AttackedPositions;
 import chess.move.logic.Legal;
 import chess.move.logic.PsuedoLegal;
@@ -35,7 +35,7 @@ public final class King extends Piece {
 
 	// Check if there are any pieces in the attackers array
 	public boolean check(GameState gameState) {
-		return getAttackers(gameState).size() > 0;
+		return !getAttackers(gameState).isEmpty();
 	}
 
 	public boolean doubleCheck(GameState gameState) {
@@ -44,16 +44,16 @@ public final class King extends Piece {
 
 	@Override
 	public List<Position> getKingDangerSquares(GameState gameState) {
-		return AttackedPositions.King(this, gameState);
+		return AttackedPositions.king(this);
 	}
 
 	@Override
 	public List<Move> getPseudoLegalMoves(GameState gameState) {
-		return PsuedoLegal.King(this, gameState);
+		return PsuedoLegal.king(this, gameState);
 	}
 
 	@Override
 	public List<Move> getLegalMoves(GameState gameState) {
-		return Legal.King(this, gameState);
+		return Legal.king(this, gameState);
 	}
 }

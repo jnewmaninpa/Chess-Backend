@@ -1,4 +1,4 @@
-package chess.gameState;
+package chess.gamestate;
 
 public class CastlingAvailability {
 
@@ -7,10 +7,6 @@ public class CastlingAvailability {
 		private boolean whiteQueenside;
 		private boolean blackKingside;
 		private boolean blackQueenside;
-
-		public Builder() {
-
-		}
 
 		public Builder withWhiteKingside(Boolean whiteKingside) {
 			this.whiteKingside = whiteKingside;

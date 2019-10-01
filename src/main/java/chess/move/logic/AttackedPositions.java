@@ -3,15 +3,19 @@ package chess.move.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.Piece;
 import chess.piece.properties.PieceColor;
 import chess.piece.properties.PieceType;
 import chess.position.Position;
 
 public class AttackedPositions {
+	
+	private AttackedPositions() {
+		
+	}
 
-	public static List<Position> Rook(Piece piece, GameState gameState) {
+	public static List<Position> rook(Piece piece, GameState gameState) {
 		List<Position> plpl = new ArrayList<>();
 
 		Position piecePos = piece.getPosition();
@@ -59,7 +63,7 @@ public class AttackedPositions {
 		return plpl;
 	}
 
-	public static List<Position> Bishop(Piece piece, GameState gameState) {
+	public static List<Position> bishop(Piece piece, GameState gameState) {
 		List<Position> plpl = new ArrayList<>();
 
 		Position piecePos = piece.getPosition();
@@ -123,16 +127,16 @@ public class AttackedPositions {
 		return plpl;
 	}
 
-	public static List<Position> Queen(Piece piece, GameState gameState) {
+	public static List<Position> queen(Piece piece, GameState gameState) {
 		List<Position> plpl = new ArrayList<>();
 
-		plpl.addAll(AttackedPositions.Rook(piece, gameState));
-		plpl.addAll(AttackedPositions.Bishop(piece, gameState));
+		plpl.addAll(AttackedPositions.rook(piece, gameState));
+		plpl.addAll(AttackedPositions.bishop(piece, gameState));
 
 		return plpl;
 	}
 
-	public static List<Position> Knight(Piece piece, GameState gameState) {
+	public static List<Position> knight(Piece piece) {
 
 		Position piecePos = piece.getPosition();
 
@@ -160,7 +164,7 @@ public class AttackedPositions {
 		return positionList;
 	}
 
-	public static List<Position> King(Piece piece, GameState gameState) {
+	public static List<Position> king(Piece piece) {
 		Position piecePos = piece.getPosition();
 		int x = piecePos.getX();
 		int y = piecePos.getY();
@@ -186,78 +190,57 @@ public class AttackedPositions {
 		return positionList;
 	}
 
-	public static List<Position> Pawn(Piece piece, GameState gameState) {
+	public static List<Position> pawn(Piece piece, GameState gameState) {
 		List<Position> plpl = new ArrayList<>();
 
 		Position piecePos = piece.getPosition();
 
 		if (piece.getColor() == PieceColor.WHITE) { // white pawn
+			
+			// take piece left
+			Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() + 1));
+			plpl.add(tempPiece3.getPosition());
 
-			// no pawn upgrade
-			if (piecePos.getY() != 6) {
-
-				// take piece left
-				Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() + 1));
-				plpl.add(tempPiece3.getPosition());
-
-				// take piece right
-				Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() + 1));
-				plpl.add(tempPiece4.getPosition());
-
-				// pawn upgrade
-			} else { // if (piecePos.getY() == 6)
-
-				// take piece left
-				Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() + 1));
-				plpl.add(tempPiece3.getPosition());
-
-				// take piece right
-				Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() + 1));
-				plpl.add(tempPiece4.getPosition());
-
-			}
-
+			// take piece right
+			Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() + 1));
+			plpl.add(tempPiece4.getPosition());
+			
 		} else if (piece.getColor() == PieceColor.BLACK) { // black pawn
+			
+			// take piece left
+			Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() - 1));
+			plpl.add(tempPiece3.getPosition());
 
-			// no pawn upgrade
-			if (piecePos.getY() != 1) {
-
-				// take piece left
-				Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() - 1));
-				plpl.add(tempPiece3.getPosition());
-
-				// take piece right
-				Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() - 1));
-				plpl.add(tempPiece4.getPosition());
-
-				// pawn upgrade
-			} else { // (piecePos.getY() == 1)
-
-				// take piece left
-				Piece tempPiece3 = gameState.getPieceAt(new Position(piecePos.getX() - 1, piecePos.getY() - 1));
-				plpl.add(tempPiece3.getPosition());
-
-				// take piece right
-				Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() - 1));
-				plpl.add(tempPiece4.getPosition());
-
-			}
+			// take piece right
+			Piece tempPiece4 = gameState.getPieceAt(new Position(piecePos.getX() + 1, piecePos.getY() - 1));
+			plpl.add(tempPiece4.getPosition());
+			
 		}
 
 		// Also add the en passant square if applicable
-		if (gameState.getEnPassantTargetSquare() != null) {
-			if ((gameState.getEnPassantTargetSquare().getX() == (piecePos.getX() + 1))
-					|| (gameState.getEnPassantTargetSquare().getX() == (piecePos.getX() - 1))) {
-				if (((gameState.getEnPassantTargetSquare().getY() == (piecePos.getY() + 1))
-						&& piece.getColor() == PieceColor.WHITE)
-						|| ((gameState.getEnPassantTargetSquare().getY() == (piecePos.getY() - 1))
-								&& piece.getColor() == PieceColor.BLACK)) {
-					plpl.add(gameState.getEnPassantTargetSquare());
-				}
-			}
+		if (enPassantMoveIsLegal(piece, gameState, piecePos)) {
+				plpl.add(gameState.getEnPassantTargetSquare());
 		}
 
 		return plpl;
+	}
+
+	private static boolean enPassantMoveIsLegal(Piece piece, GameState gameState, Position piecePos) {
+		return (gameState.getEnPassantTargetSquare() != null) &&
+				enPassantSquareIsLeftOrRightOne(gameState, piecePos) &&
+				enPassantSquareIsForwardOne(piece, gameState, piecePos);
+	}
+
+	private static boolean enPassantSquareIsForwardOne(Piece piece, GameState gameState, Position piecePos) {
+		return ((gameState.getEnPassantTargetSquare().getY() == (piecePos.getY() + 1))
+				&& piece.getColor() == PieceColor.WHITE)
+				|| ((gameState.getEnPassantTargetSquare().getY() == (piecePos.getY() - 1))
+						&& piece.getColor() == PieceColor.BLACK);
+	}
+
+	private static boolean enPassantSquareIsLeftOrRightOne(GameState gameState, Position piecePos) {
+		return (gameState.getEnPassantTargetSquare().getX() == (piecePos.getX() + 1))
+				|| (gameState.getEnPassantTargetSquare().getX() == (piecePos.getX() - 1));
 	}
 
 }

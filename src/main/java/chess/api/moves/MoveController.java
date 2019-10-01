@@ -11,8 +11,8 @@ import chess.api.exceptions.MoveNotValidException;
 import chess.api.game.GameModel;
 import chess.api.game.GameRepository;
 import chess.game.move.Move;
-import chess.gameState.FEN;
-import chess.gameState.GameState;
+import chess.gamestate.FEN;
+import chess.gamestate.GameState;
 import chess.piece.properties.PieceColor;
 import chess.piece.properties.PieceType;
 import chess.position.Position;
@@ -45,9 +45,9 @@ public class MoveController {
 
 		Move move;
 		if (gameState.getActiveColor() == PieceColor.WHITE)
-			move = AIMove.AICheckMove(gameState);
+			move = AIMove.aiCheckMove(gameState);
 		else
-			move = AIMove.AINextMove(gameState);
+			move = AIMove.aiNextMove(gameState);
 
 		if (move != null) {
 			return moveRepository.add(game, move, gameState);

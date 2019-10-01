@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import chess.game.move.Move;
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.properties.PieceColor;
 import chess.piece.properties.PieceType;
 import chess.position.Position;

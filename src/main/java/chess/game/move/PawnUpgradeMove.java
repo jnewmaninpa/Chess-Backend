@@ -1,6 +1,6 @@
 package chess.game.move;
 
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.Bishop;
 import chess.piece.Knight;
 import chess.piece.None;
@@ -30,7 +30,6 @@ public class PawnUpgradeMove extends Move {
 
 		if ((piece.getColor() == PieceColor.WHITE && this.position.getY() == 7)
 				|| (piece.getColor() == PieceColor.BLACK && this.position.getY() == 0)) {
-//				System.out.println("Upgrading a pawn");
 			switch (upgrade) {
 			case BISHOP:
 				gameState.getPieceList()

@@ -16,7 +16,7 @@ import chess.api.exceptions.MoveNotValidException;
 import chess.api.fen.FenRepository;
 import chess.api.game.GameModel;
 import chess.game.move.Move;
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.properties.PieceType;
 import chess.position.Position;
 

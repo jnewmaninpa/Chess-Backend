@@ -7,8 +7,8 @@ import java.util.List;
 import chess.game.move.KingCastleMove;
 import chess.game.move.Move;
 import chess.game.move.PawnUpgradeMove;
-import chess.gameState.FEN;
-import chess.gameState.GameState;
+import chess.gamestate.FEN;
+import chess.gamestate.GameState;
 
 public class Perft {
 

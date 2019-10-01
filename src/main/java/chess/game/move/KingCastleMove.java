@@ -1,6 +1,6 @@
 package chess.game.move;
 
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.Piece;
 import chess.piece.properties.PieceColor;
 import chess.position.Position;
@@ -44,11 +44,18 @@ public class KingCastleMove extends Move {
 	}
 
 	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (!super.equals(obj))
 			return false;
-		return getClass() == obj.getClass();
+		if (getClass() != obj.getClass())
+			return false;
+		return true;
 	}
 }

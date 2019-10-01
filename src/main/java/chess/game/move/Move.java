@@ -1,7 +1,7 @@
 package chess.game.move;
 
-import chess.gameState.FEN;
-import chess.gameState.GameState;
+import chess.gamestate.FEN;
+import chess.gamestate.GameState;
 import chess.piece.King;
 import chess.piece.Piece;
 import chess.piece.Rook;
@@ -116,12 +116,14 @@ public class Move {
 		if (piece == null) {
 			if (other.piece != null)
 				return false;
-		} else if (!piece.equals(other.piece))
+		} else if (!piece.equals(other.piece)) {
 			return false;
+		}
 		if (position == null) {
 			return other.position == null;
-		} else
+		} else {
 			return position.equals(other.position);
+		}
 	}
 
 }

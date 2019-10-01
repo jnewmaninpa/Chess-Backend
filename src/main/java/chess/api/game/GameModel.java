@@ -1,7 +1,7 @@
 package chess.api.game;
 
-import chess.gameState.FEN;
-import chess.gameState.GameState;
+import chess.gamestate.FEN;
+import chess.gamestate.GameState;
 
 public class GameModel {
 

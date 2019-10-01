@@ -2,23 +2,6 @@ package chess.position;
 
 public class Position implements Comparable<Position> {
 
-	public static void main(String... args) {
-		Position square1 = new Position(0, 4);
-		Position square2 = new Position('a', 5);
-		Position square3 = new Position(32);
-
-		System.out.println("TESTING Square.java\n");
-
-		System.out.println("All of these should be a5");
-		System.out.println("square1: x: " + square1.getX() + " y: " + square1.getY() + " file: " + square1.getFile()
-				+ " rank: " + square1.getRank() + " number: " + square1.getNumber() + " toString: " + square1);
-		System.out.println("square2: x: " + square2.getX() + " y: " + square2.getY() + " file: " + square2.getFile()
-				+ " rank: " + square2.getRank() + " number: " + square2.getNumber() + " toString: " + square2);
-		System.out.println("square3: x: " + square3.getX() + " y: " + square3.getY() + " file: " + square3.getFile()
-				+ " rank: " + square3.getRank() + " number: " + square3.getNumber() + " toString: " + square3);
-
-	}
-
 	// (0,0) corresponds to a1, (1,0) corresponds to b1
 
 	private final int x;

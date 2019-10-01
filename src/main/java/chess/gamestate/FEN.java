@@ -1,4 +1,4 @@
-package chess.gameState;
+package chess.gamestate;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.Collections;
 public class FEN {
 
 	private static final String STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-	private final String fen;
+	private final String fenString;
 
 	// CONSTRUCTORS
 
@@ -35,7 +35,7 @@ public class FEN {
 	 * @param fen Forsyth-Edwards Notation
 	 */
 	public FEN(String fen) {
-		this.fen = fen;
+		this.fenString = fen;
 	}
 
 	// PUBLIC METHODS
@@ -45,7 +45,7 @@ public class FEN {
 	 * @return Forsyth-Edwards Notation
 	 */
 	public String getFen() {
-		return fen;
+		return fenString;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class FEN {
 	 * @return a list of pieces on the board
 	 */
 	public List<Piece> getPieceList() {
-		return getPieceList(fen);
+		return getPieceList(fenString);
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class FEN {
 	 * @return the active color
 	 */
 	public PieceColor getActiveColor() {
-		return getActiveColor(fen);
+		return getActiveColor(fenString);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class FEN {
 	 * @return castling availability
 	 */
 	public CastlingAvailability getCastlingAvailability() {
-		return getCastlingAvailability(fen);
+		return getCastlingAvailability(fenString);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class FEN {
 	 * @return the en passant target square
 	 */
 	public Position getEnPassantTargetSquare() {
-		return getEnPassantTargetSquare(fen);
+		return getEnPassantTargetSquare(fenString);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class FEN {
 	 * @return the number of half moves since last capture or pawn advance
 	 */
 	public int getHalfmoveClock() {
-		return getHalfmoveClock(fen);
+		return getHalfmoveClock(fenString);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class FEN {
 	 * @return the number of full moves, starts at 1, incremented after black's turn
 	 */
 	public int getFullmoveNumber() {
-		return getFullmoveNumber(fen);
+		return getFullmoveNumber(fenString);
 	}
 
 	/**
@@ -101,13 +101,13 @@ public class FEN {
 	 * @return a GameState object
 	 */
 	public GameState getGameState() {
-		return getGameState(fen);
+		return getGameState(fenString);
 	}
 
 	// PUBLIC STATIC METHODS
 
 	public static String getFen(GameState gameState) {
-		String tempFen = "";
+		StringBuilder tempFen = new StringBuilder();
 		Collections.sort(gameState.getPieceList(), new SortByPosition());
 
 		int numberOfPieces = gameState.getPieceList().size();
@@ -120,70 +120,70 @@ public class FEN {
 						&& (gameState.getPieceList().get(currentPieceNumber).getPosition().getRank() == rankNumber)
 						&& (gameState.getPieceList().get(currentPieceNumber).getPosition().getFile() == fileLetter)) {
 					if (spacesSkipped != 0) {
-						tempFen += spacesSkipped;
+						tempFen.append(spacesSkipped);
 						spacesSkipped = 0;
 					}
-					tempFen += gameState.getPieceList().get(currentPieceNumber).getRepresentation();
+					tempFen.append(gameState.getPieceList().get(currentPieceNumber).getRepresentation());
 					currentPieceNumber++;
 				} else {
 					spacesSkipped++;
 				}
 			}
 			if (spacesSkipped != 0) {
-				tempFen += spacesSkipped;
+				tempFen.append(spacesSkipped);
 				spacesSkipped = 0;
 			}
 			if (rankNumber != 1) {
-				tempFen += "/";
+				tempFen.append("/");
 			} else {
-				tempFen += " ";
+				tempFen.append(" ");
 			}
 		}
 
 		if (gameState.getActiveColor() == PieceColor.WHITE) {
-			tempFen += "w";
+			tempFen.append("w");
 		} else if (gameState.getActiveColor() == PieceColor.BLACK) {
-			tempFen += "b";
+			tempFen.append("b");
 		}
 
-		tempFen += " ";
+		tempFen.append(" ");
 
 		if (gameState.getCastlingAvailability().getWhiteKingside()) {
-			tempFen += "K";
+			tempFen.append("K");
 		}
 		if (gameState.getCastlingAvailability().getWhiteQueenside()) {
-			tempFen += "Q";
+			tempFen.append("Q");
 		}
 		if (gameState.getCastlingAvailability().getBlackKingside()) {
-			tempFen += "k";
+			tempFen.append("k");
 		}
 		if (gameState.getCastlingAvailability().getBlackQueenside()) {
-			tempFen += "q";
+			tempFen.append("q");
 		}
 		if (!gameState.getCastlingAvailability().getWhiteKingside()
 				&& !gameState.getCastlingAvailability().getWhiteQueenside()
 				&& !gameState.getCastlingAvailability().getBlackKingside()
 				&& !gameState.getCastlingAvailability().getBlackQueenside()) {
-			tempFen += "-";
+			tempFen.append("-");
 		}
 
-		tempFen += " ";
+		tempFen.append(" ");
 
 		if (gameState.getEnPassantTargetSquare() == null) {
-			tempFen += "-";
+			tempFen.append("-");
 		} else {
-			tempFen += gameState.getEnPassantTargetSquare().toString();
+			tempFen.append(gameState.getEnPassantTargetSquare().toString());
 		}
 
-		tempFen += " ";
+		tempFen.append(" ");
 
-		tempFen += gameState.getHalfmoveClock();
+		tempFen.append(gameState.getHalfmoveClock());
 
-		tempFen += " ";
+		tempFen.append(" ");
 
-		tempFen += gameState.getFullmoveNumber();
+		tempFen.append(gameState.getFullmoveNumber());
 
-		return tempFen;
+		return tempFen.toString();
 	}
 
 	public static List<Piece> getPieceList(String fen) {
@@ -196,20 +196,14 @@ public class FEN {
 			for (String piece : rank.split("")) {
 				switch (piece) {
 				case "8":
-					fileLetter++;
 				case "7":
-					fileLetter++;
 				case "6":
-					fileLetter++;
 				case "5":
-					fileLetter++;
 				case "4":
-					fileLetter++;
 				case "3":
-					fileLetter++;
 				case "2":
-					fileLetter++;
 				case "1":
+					fileLetter += Integer.parseInt(piece) - 1;
 					break;
 				case "r":
 					pieceList.add(new Rook(fileLetter, rankNumber, PieceColor.BLACK));
@@ -247,6 +241,8 @@ public class FEN {
 				case "P":
 					pieceList.add(new Pawn(fileLetter, rankNumber, PieceColor.WHITE));
 					break;
+				default:
+					throw new InvalidFenStringException("The provided fen contained an invalid character");
 				}
 				fileLetter++;
 			}
@@ -289,6 +285,8 @@ public class FEN {
 			case "q":
 				blackQueenside = true;
 				break;
+			default:
+				throw new InvalidCastlingAvailabilityStringException("The provided castling availability string contained an illegal character");
 			}
 		}
 

@@ -6,17 +6,22 @@ import java.util.Random;
 import chess.game.move.KingCastleMove;
 import chess.game.move.Move;
 import chess.game.move.PawnUpgradeMove;
-import chess.gameState.GameState;
+import chess.gamestate.GameState;
 import chess.piece.properties.PieceType;
 
 public class AIMove {
+	
+	private AIMove() {
+		
+	}
+	
+	private static Random random = new Random();
 
-	public static Move AINextMove(GameState gameState) {
+	public static Move aiNextMove(GameState gameState) {
 
-		Random random = new Random();
 		List<Move> moveList = gameState.getAllMoves();
 
-		if (moveList.size() > 0) {
+		if (!moveList.isEmpty()) {
 			int index = random.nextInt(moveList.size());
 			return moveList.get(index);
 		} else {
@@ -24,18 +29,15 @@ public class AIMove {
 		}
 	}
 
-	public static Move AIAgressiveMove(GameState gameState) {
+	public static Move aiAgressiveMove(GameState gameState) {
 
-		Random random = new Random();
 		List<Move> moveList = gameState.getAllMoves();
 
-		if (moveList.size() > 0) {
+		if (!moveList.isEmpty()) {
 			// if there is a piece to take take it 75% of the time
 			for (Move move : moveList) {
-				if (gameState.getPieceAt(move.getPosition()).getType() != PieceType.NONE) {
-					if (random.nextInt(99) <= 75) { // 75% of the time
-						return move;
-					}
+				if ((gameState.getPieceAt(move.getPosition()).getType() != PieceType.NONE) && (random.nextInt(99) <= 75)) {
+					return move;
 				}
 			}
 			// otherwise make a random move
@@ -46,12 +48,11 @@ public class AIMove {
 		}
 	}
 
-	public static Move AICheckMove(GameState gameState) {
+	public static Move aiCheckMove(GameState gameState) {
 
-		Random random = new Random();
 		List<Move> moveList = gameState.getAllMoves();
 
-		if (moveList.size() > 0) {
+		if (!moveList.isEmpty()) {
 			// if there is a piece to take take it 90% of the time
 			for (Move move : moveList) {
 				GameState tempGameState = gameState.copy();
@@ -71,26 +72,20 @@ public class AIMove {
 					return move;
 				}
 				// if the move puts the player in check take it 90% of the time
-				if (tempGameState.playerInCheck()) {
-					if (random.nextInt(99) <= 90) { // 90% of the time
-						return move;
-					}
+				if (tempGameState.playerInCheck() && (random.nextInt(99) <= 90)) {
+					return move;
 				}
 			}
 			// if there is a piece to take take it 60% of the time
 			for (Move move : moveList) {
-				if (gameState.getPieceAt(move.getPosition()).getType() != PieceType.NONE) {
-					if (random.nextInt(99) <= 60) { // 60% of the time
-						return move;
-					}
+				if ((gameState.getPieceAt(move.getPosition()).getType() != PieceType.NONE) && (random.nextInt(99) <= 60)) {
+					return move;
 				}
 			}
 			// otherwise advance a pawn 50& of the time
 			for (Move move : moveList) {
-				if (move.getPiece().getType() == PieceType.PAWN) {
-					if (random.nextInt(99) <= 50) { // 50% of the time
-						return move;
-					}
+				if ((move.getPiece().getType() == PieceType.PAWN) && (random.nextInt(99) <= 50)) {
+					return move;
 				}
 			}
 			// otherwise make a random move
